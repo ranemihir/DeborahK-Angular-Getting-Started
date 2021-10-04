@@ -1,0 +1,52 @@
+
+// Generic validator for Reactive forms
+// Implemented as a class, not a service, so it can retain state for multiple forms.
+
+import { FormGroup } from "@angular/forms";
+
+// NOTE: This validator does NOT support validation of controls or groups within a FormArray.
+export class GenericValidator {
+
+    // Provide the set of valid validation messages
+    // Stucture:
+    // controlName1: {
+    //     validationRuleName1: 'Validation Message.',
+    //     validationRuleName2: 'Validation Message.'
+    // },
+    // controlName2: {
+    //     validationRuleName1: 'Validation Message.',
+    //     validationRuleName2: 'Validation Message.'
+    // }
+    constructor(private validationMessages: { [key: string]: { [key: string]: string; }; }) { }
+
+    processMessages(container: FormGroup): { [key: string]: string; } {
+        const messages: { [key: string]: any; } = {};
+
+        for (const controlKey in container.controls) {
+            if (container.controls.hasOwnProperty(controlKey)) {
+                const c = container.controls[controlKey];
+
+                // if its a FormGroup, process its child controls
+                if (c instanceof FormGroup) {
+                    const childMessages = this.processMessages(c);
+                    Object.assign(messages, childMessages);
+                } else {
+                    // Only validate if there are validation messages for the control
+                    if (this.validationMessages[controlKey]) {
+                        messages[controlKey] = '';
+
+                        if ((c.dirty || c.touched) && c.errors) {
+                            Object.keys(c.errors).map(messageKey => {
+                                if (this.validationMessages[controlKey][messageKey]) {
+                                    messages[controlKey] += (this.validationMessages[controlKey][messageKey] + '\n');
+                                }
+                            });
+                        }
+                    }
+                }
+            }
+        }
+
+        return messages;
+    }
+}
