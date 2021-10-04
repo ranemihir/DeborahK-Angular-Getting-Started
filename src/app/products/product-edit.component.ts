@@ -1,5 +1,5 @@
 import { Component, ElementRef, OnDestroy, OnInit, ViewChildren } from '@angular/core';
-import { FormArray, FormBuilder, FormControlName, FormGroup, Validators } from '@angular/forms';
+import { FormArray, FormBuilder, FormControl, FormControlName, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { fromEvent, merge, Observable, Subscription } from 'rxjs';
 import { debounceTime } from 'rxjs/operators';
@@ -117,12 +117,27 @@ export class ProductEditComponent implements OnInit, OnDestroy {
     this.sub?.unsubscribe();
   };
 
-  addTag() {
-
+  addTag(): void {
+    this.tags.push(new FormControl());
   }
 
-  deleteProduct() {
+  deleteTag(index: number): void {
+    this.tags.removeAt(index);
+    this.tags.markAsDirty();
+  }
 
+
+  deleteProduct(): void {
+    if (this.product.id === 0) {
+      this.onSaveComplete();
+    } else {
+      if (confirm(`Do you really want to delete ${this.product.productName}?`)) {
+        this.productService.deleteProduct(this.product.id).subscribe({
+          next: () => this.onSaveComplete(),
+          error: (err) => this.errorMessage = err
+        });
+      }
+    }
   }
 
   saveProduct(): void {
@@ -155,9 +170,5 @@ export class ProductEditComponent implements OnInit, OnDestroy {
   onSaveComplete() {
     this.productForm.reset();
     this.router.navigate(['/products']);
-  }
-
-  deleteTag(i: number) {
-
   }
 }
