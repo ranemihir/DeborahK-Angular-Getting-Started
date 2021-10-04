@@ -11,7 +11,7 @@ import { ProductService } from './product.service';
 export class ProductDetailComponent implements OnInit {
   pageTitle: string = 'Product Details: ';
   errorMessage = '';
-  product: Product | undefined;
+  product!: Product;
 
   constructor(private route: ActivatedRoute,
     private router: Router,
