@@ -43,7 +43,7 @@
                                  [style.margin.px]='imageMargin'>
                         </td>
                         <td>
-                            <a [routerLink]="['/products', product.productId]">{{ product.productName }}</a>
+                            <a [routerLink]="['/products', product.id]">{{ product.productName }}</a>
                         </td>
                         <td>{{ product.productCode | lowercase | convertToSpaces:'-' }}</td>
                         <td>{{ product.releaseDate }}</td>
@@ -51,6 +51,12 @@
                         <td>
                             <pm-star [rating]='product.starRating'
                                      (ratingClicked)='onRatingClicked($event)'></pm-star>
+                        </td>
+                        <td>
+                            <button class="btn btn-outline-primary btn-sm"
+                                    [routerLink]="['/products', product.id, 'edit']">
+                                Edit
+                            </button>
                         </td>
                     </tr>
                 </tbody>

@@ -7,6 +7,8 @@ import { SharedModule } from '../shared/shared.module';
 import { ProductEditComponent } from './product-edit.component';
 import { ReactiveFormsModule } from '@angular/forms';
 import { ProductEditGuard } from './product-edit.guard';
+import { InMemoryWebApiModule } from 'angular-in-memory-web-api';
+import { ProductData } from './product-data';
 
 @NgModule({
   declarations: [
@@ -28,10 +30,11 @@ import { ProductEditGuard } from './product-edit.guard';
       },
       {
         path: 'products/:id/edit',
-        canActivate: [ProductEditGuard],
+        canDeactivate: [ProductEditGuard],
         component: ProductEditComponent
       }
     ]),
+    InMemoryWebApiModule.forRoot(ProductData),
     SharedModule
   ]
 })

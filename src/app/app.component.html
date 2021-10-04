@@ -9,6 +9,10 @@
             <a routerLink="/products"
                class="nav-link">Products</a>
         </li>
+        <li>
+            <a [routerLink]="['/products', '0', 'edit']"
+               class="nav-link">Add Product</a>
+        </li>
     </ul>
 </nav>
 <div class="container">
