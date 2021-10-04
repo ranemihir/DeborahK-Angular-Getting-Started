@@ -34,6 +34,14 @@
                         </pm-star>
                     </div>
                 </div>
+                <div class='row'>
+                    <div class='col-md-4'>Tags:</div>
+                    <div class='col-md-8'>
+                        <span *ngFor="let tag of product.tags"
+                              style="font-size: 14px; font-weight: 400;"
+                              class="badge badge-pill badge-primary mr-2">{{ tag | titlecase }}</span>
+                    </div>
+                </div>
             </div>
 
             <div class='col-md-4'>
@@ -43,6 +51,7 @@
                      [src]='product.imageUrl'
                      [title]='product.productName'>
             </div>
+
         </div>
 
         <div class="row mt-4">
